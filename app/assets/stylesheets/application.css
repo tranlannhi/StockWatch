@@ -15,14 +15,24 @@
  *= require bootstrap
  */
 
-#sidebar {
-	height: 100%;
-	padding-right: 0;
-	padding-top: 20px;
+.sidebar {
+	position: absolute;
+	width: 250px;
+	margin-top: 51px;
 }
 
-#sidebar li {
-	border:1px #f2f2f2 solid;
-	border-bottom-width:1px;
+.sidebar .sidebar-search{
+	padding: 15px;
 }
 
+.sidebar ul li {
+	border-bottom: 1px solid #e7e7e7;
+}
+
+#page-wrapper {
+	position: inherit;
+	margin: 0 0 0 250px;
+	padding:0 30px;
+	border-left: 1px solid #e7e7e7;
+	min-height: 485px;
+}
