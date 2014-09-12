@@ -31,7 +31,9 @@ gem 'bcrypt', '~> 3.1.7' , require: "bcrypt"
 
 gem 'angularjs-rails'
 
+#Add Bootstrap!
 gem 'bootstrap-sass'
+gem 'bootstrap-glyphicons'
 
 # Use unicorn as the app server
 # gem 'unicorn'
