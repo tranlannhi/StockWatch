@@ -1,5 +1,6 @@
 class User < ActiveRecord::Base
 	attr_accessor :password
+	attr_accessor :password_confirmation
 	before_save :encrypt_password
 
 	def encrypt_password
