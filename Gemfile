@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'twitter'
+gem 'foreman'
 
 gem 'dotenv-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
@@ -45,7 +46,7 @@ gem 'bootstrap-glyphicons'
 
 # Use debugger
 # gem 'debugger', group: [:development, :test]
-
+gem 'unicorn'
 
 #Testing 
 group :development, :test do
@@ -53,4 +54,6 @@ group :development, :test do
 	gem 'capybara'
 end	
 
+gem 'rails_12factor', group: :production
+ruby "2.1.2"
 
