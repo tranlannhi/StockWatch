@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'twitter'
 gem 'foreman'
+gem 'httparty'
 
 gem 'dotenv-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'

@@ -1,4 +1,8 @@
+
 class StocksController < ApplicationController
-	def new
+	def index
+		@response = Psychsignal.response
 	end
+
+
 end

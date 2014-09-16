@@ -1,5 +1,118 @@
 
 <!--sidebar-->
+
+<script type="text/javascript">
+		angular.module('stockWatchApp', []).controller('stockWatchController', function($scope, $http) {
+		  	
+			$scope.init = function() {
+				//$scope.lookupTicker();
+			}
+
+			$scope.typingTimer;
+			$scope.doneTypingInterval = 700;
+
+			$scope.submit = function() {
+				$scope.lookupSymbol()
+					.done(function(companies) {
+						var symbol = companies[0].Symbol;
+						$scope.getQuote(symbol);
+						$scope.getSentiment(symbol);
+					});
+			}
+
+
+			$scope.autocomplete = function() {
+				//console.log("Length: " + $scope.searchTerm.length);
+				if ($scope.searchTerm.length >= 3) {
+					clearTimeout($scope.typingTimer);
+				   	$scope.typingTimer = setTimeout(
+				        function(){ 
+				        	console.log("Performing Lookup");
+							$scope.lookupSymbol()
+								.done(function(companies) {
+									$scope.$apply();
+								});
+				        },
+				        $scope.doneTypingInterval
+				    );
+					
+				}
+				else
+				{
+					$scope.companies = [];
+				}
+			}
+
+
+			$scope.lookupSymbol = function() {
+				var apiUrl = "http://dev.markitondemand.com/Api/v2/Lookup/jsonp?input=" + $scope.searchTerm;
+
+				return $.ajax({
+					        url: apiUrl,
+					        dataType: "jsonp"
+						}).done(function(response) {
+						  	console.log("Companies: %O", response);
+						  	$scope.companies = response;
+						  	return $scope.companies;
+						});
+			}
+
+			$scope.getQuote = function(symbol) {
+				var apiUrl = "http://dev.markitondemand.com/Api/v2/Quote/jsonp?symbol=" + symbol;
+
+				return $.ajax({
+					        url: apiUrl,
+					        dataType: "jsonp"
+						}).done(function(response) {
+						  	console.log("Quote: %O", response);
+						  	$scope.quote = response;
+						  	return $scope.quote;
+						});
+			}
+
+			$scope.getSentiment = function(symbol) {
+				var apiKey = "3c41002ea759f8dbbb0d81e714cac64f";
+				var d = new Date(new Date().setDate(new Date().getDate()-2));
+				var from = d.getFullYear().toString() + ("0" + (d.getMonth() + 1)).slice(-2).toString() + ("0" + d.getDate()).slice(-2).toString();
+				var to = from;
+				console.log("Symbol: " + symbol);
+				console.log("From: " + from);
+
+				
+				return $.ajax({
+							data: { api_key: apiKey, symbol: symbol, from: from, to: from },
+					        url: apiUrl,
+					        dataType: "jsonp"
+						}).done(function(response) {
+						  	console.log("Sentiment: %O", response);
+						  	$scope.sentiment = response;
+						  	return $scope.sentiment;
+						});
+
+				
+			}
+
+			
+			$scope.init();
+		});
+  </script>
+  
+
+<div ng-app="stockWatchApp" >
+	<div ng-controller="stockWatchController">
+		<!-- <label for="quote">Get Quote!</label> -->
+		<input id="quote" type="text" ng-model="searchTerm" ng-change="autocomplete()"></input>
+		<div class="btn btn-default" ng-click="submit()">Get Quote!</div>
+		<ul>
+			<li ng-repeat="company in companies">
+				{{company.Name}} ({{company.Symbol}})
+			</li>
+		</ul>
+		<div>{{}}</div>
+	</div>
+</div>
+
+
 <div class="navbar-default sidebar" role="navigation">
 	<ul class="nav" id ="side-menu">
 		<li class="sidebar-search">
@@ -54,3 +167,4 @@
 
 </div>	
 </div>
+
