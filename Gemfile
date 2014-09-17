@@ -3,7 +3,7 @@ source 'https://rubygems.org'
 gem 'twitter'
 gem 'foreman'
 gem 'httparty'
-
+gem 'twitter-typeahead-rails'
 gem 'dotenv-rails'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.1.4'
@@ -31,7 +31,7 @@ gem 'sdoc', '~> 0.4.0',          group: :doc
 gem 'spring',        group: :development
 
 # Use ActiveModel has_secure_password
-gem 'bcrypt', '~> 3.1.7' , require => "bcrypt"
+gem 'bcrypt', '~> 3.1.7' , require: "bcrypt"
 
 gem 'angularjs-rails'
 

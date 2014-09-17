@@ -1,0 +1,74 @@
+
+<div ng-app="stockWatchApp" ng-controller="stockWatchController">
+<div>
+	<div class="navbar-default sidebar" role="navigation">
+		<ul class="nav" id ="side-menu">
+			<li class="sidebar-search">
+				<div class="input-group custom-search-form">
+					<input type="text" class="form-control" placeholder="Company/Symbol" ng-model="searchTerm" id="search_bar" ng-change="autocomplete()" />
+						
+
+					<div class="input-group-btn">
+						<button class= "btn btn-default search" id="quote_button" ng-click="searchQuote()">
+							<i class="glyphicon glyphicon-search"></i>
+						</button>
+					</div>
+
+					<!--<ul>
+						<li ng-repeat="company in companies">
+							{{company.Name}} ({{company.Symbol}})
+						</li>
+					</ul> -->	
+				</div>
+			</li>
+		
+			<li>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<div class='panel-title'>Twitter Feed</div>
+					</div>
+				</div>
+			</li>
+		</ul>
+	</div>	
+</div>
+
+
+
+<div id="page-wrapper">
+<div class="row">
+	<div class="col-lg-12">
+		<h3 class="page-header">{{quoteHeader}}</h3>
+	</div>
+</div>	
+	<div class="row" />
+	
+	<div class="col-lg-8">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<i class="glyphicon glyphicon-signal"></i>&nbspChart Area
+			</div>
+			<div class="panel-body">
+				<div>Graph</div>
+			</div>
+		</div>	
+	</div>
+	<div class="col-lg-4">
+		<div class="panel panel-default">
+			<div class="panel-heading">
+				<i class="glyphicon glyphicon-list-alt"></i>&nbspCompany News
+			</div>
+			<div class="panel-body">
+				<div></div>
+			</div>
+		</div>	
+	</div>
+
+</div>	
+</div>
+<table>
+
+  <td>RESPONSE: <%= @response[0] %></td>
+
+</table>
+</div>
