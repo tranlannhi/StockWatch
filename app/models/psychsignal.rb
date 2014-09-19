@@ -5,12 +5,16 @@ require 'httparty'
 class Psychsignal
   include HTTParty
 
-  def self.response
+  def self.getSentiment(symbol,startdate,enddate)
     api_key = ENV["PSYCHSIGNAL_API_KEY"]
- 	symbol  = "aapl"
-    api_url = "https://api.psychsignal.com/v1/sentiments?api_key=#{api_key}&symbol=#{symbol}&from=20140901&to=20140905&period=d&format=JSON"
+ 	#startdate = ""
+ 	#enddate = ""
+    api_url = "https://api.psychsignal.com/v1/sentiments?api_key=#{api_key}&symbol=#{symbol}&from=#{startdate}&to=#{enddate}&period=d&format=JSON"
     
-    HTTParty.get(api_url)
+    #HTTParty.get(api_url) 
+    HTTParty.get(api_url).parsed_response.map {|s| 
+	    	{date: s["date"], bullish: s["bullish"], bearish: s["bearish"]}
+	    }
   end
 
 end

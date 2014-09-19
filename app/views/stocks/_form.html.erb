@@ -25,7 +25,12 @@
 			<li>
 				<div class="panel panel-default">
 					<div class="panel-heading">
-						<div class='panel-title'>Twitter Feed</div>
+						<div class='panel-title'>Twitter Feed
+							<ul>
+							    <% @tweets.each do |tweet| %>
+							    <li><%= link_to tweet.text, "https://www.twitter.com/#{tweet.user.screen_name}" %></li>
+							</ul>
+						</div>
 					</div>
 				</div>
 			</li>
@@ -38,7 +43,12 @@
 <div id="page-wrapper">
 <div class="row">
 	<div class="col-lg-12">
-		<h3 class="page-header">{{quoteHeader}}</h3>
+		<h3 class="page-header">
+			
+			<span ng-if="stock != null">
+				{{companies[0].Name}} {{companies[0].Symbol}} {{stock.values[stock.values.length-1]}} {{stock.sentiment[stock.sentiment.length-1].bullish}}
+			</span>
+		</h3>
 	</div>
 </div>	
 	<div class="row" />
@@ -49,7 +59,7 @@
 				<i class="glyphicon glyphicon-signal"></i>&nbspChart Area
 			</div>
 			<div class="panel-body">
-				<div>Graph</div>
+				<div id="graph">Graph</div>
 			</div>
 		</div>	
 	</div>
@@ -68,7 +78,7 @@
 </div>
 <table>
 
-  <td>RESPONSE: <%= @response[0] %></td>
+ 
 
 </table>
 </div>

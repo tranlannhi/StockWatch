@@ -5,6 +5,36 @@
   <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true %>
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
 
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+  <style type='text/css'>
+    .body {
+    font: 10px sans-serif;
+}
+.axis path, .axis line {
+    fill: none;
+    stroke: #000;
+    shape-rendering: crispEdges;
+}
+.line {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+.line.second {
+    stroke: red;
+}
+.area {
+    fill: none;
+    opacity: 0.5;
+}
+.dot {
+    fill: none;
+    stroke: steelblue;
+    stroke-width: 1.5px;
+}
+  </style>
+
   
   
   <%= csrf_meta_tags %>

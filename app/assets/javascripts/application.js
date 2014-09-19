@@ -23,24 +23,26 @@
 				//$scope.lookupTicker();
 			}
 
-			$scope.typingTimer;
-			$scope.doneTypingInterval = 700;
-
+			
 			$scope.searchQuote = function() {
-				$scope.lookupSymbol()
+				$scope.lookupSymbol($scope.searchTerm)
 					.done(function(companies) {
-						var symbol = companies[0].Symbol;
-						$scope.quote = $scope.getQuote(symbol);
-						console.log(companies);
-						//$scope.getSentiment(symbol);
+						$scope.symbol = companies[0].Symbol;
+						$scope.getStock($scope.symbol)
+							.done(function(stock) {
+								var datapoints = $scope.getDataPoints(stock.sentiment);
+								console.log("DATAPOINTS: %O", datapoints);
+								$scope.drawGraph(datapoints);
+								$scope.$apply();
+							});
 					});
-
-				//$('#div_hello').html("<%= controller.msg1 %>");
-				// $("#time_div").html("some text");
 			};
 
 
 			$scope.autocomplete = function() {
+				$scope.typingTimer;
+				$scope.doneTypingInterval = 700;
+
 				//console.log("Length: " + $scope.searchTerm.length);
 				if ($scope.searchTerm.length >= 3) {
 					clearTimeout($scope.typingTimer);
@@ -75,6 +77,23 @@
 					});
 			};
 
+
+			$scope.getStock = function(symbol) {
+				var apiUrl = "http://0.0.0.0:3000/stocks/" + symbol;
+
+				return $.ajax({
+				        url: apiUrl
+				        //dataType: "json"
+					}).done(function(response) {
+					  	console.log("Stock: %O", response);
+					  	$scope.stock = response;
+					  	$scope.$apply();
+					  	return $scope.stock;
+					});
+			}
+
+
+			/*
 			$scope.getQuote = function(symbol) {
 				var apiUrl = "http://dev.markitondemand.com/Api/v2/Quote/jsonp?symbol=" + symbol;
 
@@ -88,9 +107,10 @@
 						  	return response;
 						});
 			};
+			*/
 
-			
 
+			/*
 			$scope.getSentiment = function(symbol) {
 				var apiKey = "3c41002ea759f8dbbb0d81e714cac64f";
 				var d = new Date(new Date().setDate(new Date().getDate()-2));
@@ -113,6 +133,303 @@
 
 				
 			}
+			*/
+
+
+
+
+
+
+
+
+			/*
+			var w = 600;
+			var h = 250;
+
+			var dataset = [ 
+				{ key: 0, value: 5 },
+				{ key: 1, value: 10 },
+				{ key: 2, value: 13 },
+				{ key: 3, value: 19 },
+				{ key: 4, value: 21 },
+				{ key: 5, value: 25 },
+				{ key: 6, value: 22 },
+				{ key: 7, value: 18 },
+				{ key: 8, value: 15 },
+				{ key: 9, value: 13 },
+				{ key: 10, value: 11 },
+				{ key: 11, value: 12 },
+				{ key: 12, value: 15 },
+				{ key: 13, value: 20 },
+				{ key: 14, value: 18 },
+				{ key: 15, value: 17 },
+				{ key: 16, value: 16 },
+				{ key: 17, value: 18 },
+				{ key: 18, value: 23 },
+				{ key: 19, value: 25 } ];
+
+			var xScale = d3.scale.ordinal()
+							.domain(d3.range(dataset.length))
+							.rangeRoundBands([0, w], 0.05); 
+
+			var yScale = d3.scale.linear()
+							.domain([0, d3.max(dataset, function(d) {return d.value;})])
+							.range([0, h]);
+
+			var key = function(d) {
+				return d.key;
+			};
+
+			//Create SVG element
+			var svg = d3.select("#graph")
+						.append("svg")
+						.attr("width", w)
+						.attr("height", h);
+
+			//Create bars
+			svg.selectAll("rect")
+			   .data(dataset, key)
+			   .enter()
+			   .append("rect")
+			   .attr("x", function(d, i) {
+					return xScale(i);
+			   })
+			   .attr("y", function(d) {
+					return h - yScale(d.value);
+			   })
+			   .attr("width", xScale.rangeBand())
+			   .attr("height", function(d) {
+					return yScale(d.value);
+			   })
+			   .attr("fill", function(d) {
+					return "rgb(0, 0, " + (d.value * 10) + ")";
+			   })
+
+				//Tooltip
+				.on("mouseover", function(d) {
+					//Get this bar's x/y values, then augment for the tooltip
+					var xPosition = parseFloat(d3.select(this).attr("x")) + xScale.rangeBand() / 2;
+					var yPosition = parseFloat(d3.select(this).attr("y")) + 14;
+					
+					//Update Tooltip Position & value
+					d3.select("#tooltip")
+						.style("left", xPosition + "px")
+						.style("top", yPosition + "px")
+						.select("#value")
+						.text(d.value);
+					d3.select("#tooltip").classed("hidden", false)
+				})
+				.on("mouseout", function() {
+					//Remove the tooltip
+					d3.select("#tooltip").classed("hidden", true);
+				})	;
+			*/
+
+			$scope.getDataPoints = function(sentimentArr) {
+				var bullishArr = new Array();
+
+				for (var i = 0; i < sentimentArr.length; i++) {
+					bullishArr.push(sentimentArr[i].bullish);
+				}
+
+				return bullishArr;
+			}
+
+
+			$scope.drawGraph = function(innerData) {
+				// clear chart if already exists
+				d3.select("svg").remove();
+
+				// Check out http://jsfiddle.net/nrabinowitz/JTrnC/
+
+				data = [
+					innerData
+				];
+				console.log("In DrawGraph(), data: %O", data);
+				/*
+				var data = [
+				    [12345, 42345, 3234, 22345, 72345, 62345, 32345, 92345, 52345, 22345],
+				    [1234, 4234, 3234, 2234, 7234, 6234, 3234, 9234, 5234, 2234]
+				];
+				*/
+
+				//var data = [{"date":"2012-03-20","total":3},{"date":"2012-03-21","total":8},{"date":"2012-03-22","total":2},{"date":"2012-03-23","total":10},{"date":"2012-03-24","total":3},{"date":"2012-03-25","total":20},{"date":"2012-03-26","total":12}];
+
+
+				var margin = {top: 30, right: 30, bottom: 30, left: 60},
+				    width = 500 - margin.left - margin.right,
+				    height = 300 - margin.top - margin.bottom;
+
+
+				/****** LINE ******/
+				var x = d3.scale.linear().domain([0, data[0].length]).range([0, width]),
+				    y = d3.scale.linear().domain([0, d3.max(data[0])]).range([height, 0]);
+				    xAxis = d3.svg.axis().scale(x).ticks(10),
+				    yAxis = d3.svg.axis().scale(y).ticks(10).orient("left");
+				
+
+				var svg = d3.select("#graph").append("svg")
+				      .attr("width", width + margin.left + margin.right)
+				      .attr("height", height + margin.top + margin.bottom);
+
+
+				// horizontal lines
+				svg.selectAll(".hline").data(d3.range(10)).enter()
+				    .append("line")
+				    .attr("y1", function (d) {
+				    return d * 26 + 6;
+				})
+				    .attr("y2", function (d) {
+				    return d * 26 + 6;
+				})
+				    .attr("x1", function (d) {
+				    return 0;
+				})
+				    .attr("x2", function (d) {
+				    return width;
+				})
+				    .style("stroke", "#eee")
+				    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+
+				//vertical lines
+				svg.selectAll(".vline").data(d3.range(21)).enter()
+				    .append("line")
+				    .attr("x1", function (d) {
+				    return d * (width / 10);
+				})
+				    .attr("x2", function (d) {
+				    return d * (width / 10);
+				})
+				    .attr("y1", function (d) {
+				    return 0;
+				})
+				    .attr("y2", function (d) {
+				    return height;
+				})
+				    .style("stroke", "#eee")
+				    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+				    
+
+
+
+
+
+
+				var line = d3.svg.line()
+				    .x(function (d, i) {
+				    return x(i);
+				})
+				    .y(function (d) {
+				    return y(d);
+				});
+
+				var area = d3.svg.area()
+				    .x(line.x())
+				    .y1(line.y())
+				    .y0(y(0));
+
+
+
+				var lines = svg.selectAll("g")
+				    .data(data);
+
+				var aLineContainer = lines.enter().append("g")
+				    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+				aLineContainer.append("path")
+				    .attr("class", "area")
+				    .attr("d", area);
+
+				aLineContainer.append("path")
+				    .attr("class", "line")
+				    .attr("d", line);
+
+				aLineContainer.selectAll(".dot")
+				    .data(function (d, i) {
+				    return d;
+				})
+				    .enter()
+				    .append("circle")
+				    .attr("class", "dot")
+				    .attr("cx", line.x())
+				    .attr("cy", line.y())
+				    .attr("r", 3.0);
+
+
+				  // Add the x-axis.
+				  svg.append("g")
+				      .attr("class", "x axis")
+				      .attr("transform", "translate(" + margin.left + "," + (height + margin.top) + ")")
+				      .call(xAxis);
+
+
+				  // Add the y-axis.
+				  svg.append("g")
+				      .attr("class", "y axis")
+				      .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+				      .call(yAxis);
+
+
+
+
+				  /****** BAR *****
+
+				  var x = d3.time.scale()
+				    .domain([new Date(data[0].date), d3.time.day.offset(new Date(data[data.length - 1].date), 1)])
+				    .rangeRound([0, width - margin.left - margin.right]);
+
+				var y = d3.scale.linear()
+				    .domain([0, d3.max(data, function(d) { return d.total; })])
+				    .range([height - margin.top - margin.bottom, 0]);
+
+				var xAxis = d3.svg.axis()
+				    .scale(x)
+				    .orient('bottom')
+				    .ticks(d3.time.days, 1)
+				    .tickFormat(d3.time.format('%a %d'))
+				    .tickSize(0)
+				    .tickPadding(8);
+
+				var yAxis = d3.svg.axis()
+				    .scale(y)
+				    .orient('left')
+				    .tickPadding(8);
+
+				  var svg = d3.select('#graph').append('svg')
+				    .attr('class', 'chart')
+				    .attr('width', width)
+				    .attr('height', height)
+				  .append('g')
+				    .attr('transform', 'translate(' + margin.left + ', ' + margin.top + ')');
+
+				svg.selectAll('.chart')
+				    .data(data)
+				  .enter().append('rect')
+				    .attr('class', 'bar')
+				    .attr('x', function(d) { return x(new Date(d.date)); })
+				    .attr('y', function(d) { return height - margin.top - margin.bottom - (height - margin.top - margin.bottom - y(d.total)) })
+				    .attr('width', 10)
+				    .attr('height', function(d) { return height - margin.top - margin.bottom - y(d.total) });
+
+				svg.append('g')
+				    .attr('class', 'x axis')
+				    .attr('transform', 'translate(0, ' + (height - margin.top - margin.bottom) + ')')
+				    .call(xAxis);
+
+				svg.append('g')
+				  .attr('class', 'y axis')
+				  .call(yAxis);
+				*/
+				 
+			}
+
+			
+
+
+
+
+
 
 			
 			$scope.init();
