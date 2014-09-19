@@ -3,10 +3,10 @@ require 'httparty'
 class Markit
   include HTTParty
 
-  def self.getQuote(searchTerm, startdate, enddate)
+  def self.getQuote(symbol, startdate, enddate)
     
- 	symbol  = "aapl"
- 	url = URI.encode("http://dev.markitondemand.com/Api/v2/InteractiveChart/jsonp?parameters={Normalized:false,StartDate:\"#{startdate}\",EndDate:\"#{enddate}\",DataPeriod:\"Day\",Elements:[{Symbol:\"AAPL\",Type:\"price\",Params:[\"c\"]}]}")
+ 	 
+ 	url = URI.encode("http://dev.markitondemand.com/Api/v2/InteractiveChart/jsonp?parameters={Normalized:false,StartDate:\"#{startdate}\",EndDate:\"#{enddate}\",DataPeriod:\"Day\",Elements:[{Symbol:\"#{symbol}\",Type:\"price\",Params:[\"c\"]}]}")
  
     closing_prices = HTTParty.get(url)
 
@@ -15,3 +15,4 @@ class Markit
   end
 
 end
+

@@ -28,7 +28,8 @@
 						<div class='panel-title'>Twitter Feed
 							<ul>
 							    <% @tweets.each do |tweet| %>
-							    <li><%= link_to tweet.text, "https://www.twitter.com/#{tweet.user.screen_name}" %></li>
+							    <li><%= tweet.text %></li>
+							    <% end %>
 							</ul>
 						</div>
 					</div>
