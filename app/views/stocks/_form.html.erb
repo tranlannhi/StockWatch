@@ -27,9 +27,9 @@
 					<div class="panel-heading">
 						<div class='panel-title'>Twitter Feed
 							<ul>
-							    <% @tweets.each do |tweet| %>
-							    <li><%= tweet.text %></li>
-							    <% end %>
+							    
+							    <h5><li ng-repeat="tweet in stock.tweets">{{tweet.text}}</li></h5
+							    
 							</ul>
 						</div>
 					</div>

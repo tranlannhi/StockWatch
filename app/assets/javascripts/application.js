@@ -30,6 +30,7 @@
 						$scope.symbol = companies[0].Symbol;
 						$scope.getStock($scope.symbol)
 							.done(function(stock) {
+								$scope.stock = stock;
 								var datapoints = $scope.getDataPoints(stock.sentiment);
 								console.log("DATAPOINTS: %O", datapoints);
 								$scope.drawGraph(datapoints);
