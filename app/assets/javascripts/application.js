@@ -32,8 +32,11 @@
 							.done(function(stock) {
 								$scope.stock = stock;
 								var datapoints = $scope.getDataPoints(stock.sentiment);
+								var highchartData = $scope.getHighChartData(stock.sentiment);
 								console.log("DATAPOINTS: %O", datapoints);
-								$scope.drawGraph(datapoints);
+								//$scope.drawGraph(datapoints);
+								$scope.drawHighChart(highchartData);
+								$scope.drawGauge(stock.sentiment);
 								$scope.$apply();
 							});
 					});
@@ -234,6 +237,79 @@
 				}
 
 				return bullishArr;
+			}
+
+			$scope.getHighChartData = function(sentimentArr) {
+				var bullishArr = new Array();
+
+				for (var i = 0; i < sentimentArr.length; i++) {
+					bullishArr.push(new Array(Date.parse(sentimentArr[i].date), sentimentArr[i].bullish));
+				}
+
+				return bullishArr;
+			}
+
+			$scope.drawGauge = function(sentimentArr) {
+				var g1 = new JustGage({
+		          id: "g1", 
+		          value: Math.round(sentimentArr[sentimentArr.length - 1].bullish * 100) / 100, 
+		          min: -2,
+		          max: 2,
+		          title: "Current Bullishness",
+		          label: "",
+		          levelColors: ["#FF0000", "#FFFF00", "#00E600"]
+		        });
+			}
+
+			$scope.drawHighChart = function(data) {
+				console.log("High Chart Data: %O", data);
+
+				$('#container').highcharts('StockChart', {
+
+
+			            rangeSelector : {
+			                selected : 1,
+			                inputEnabled: $('#container').width() > 480
+			            },
+
+			            title : {
+			                text : $scope.symbol + ' Stock Price'
+			            },
+
+			            series : [{
+			                name : $scope.symbol,
+			                data : data,
+			                tooltip: {
+			                    valueDecimals: 2
+			                }
+			            }]
+			        });
+
+				/*
+				$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
+			        // Create the chart
+			        $('#container').highcharts('StockChart', {
+
+
+			            rangeSelector : {
+			                selected : 1,
+			                inputEnabled: $('#container').width() > 480
+			            },
+
+			            title : {
+			                text : 'AAPL Stock Price'
+			            },
+
+			            series : [{
+			                name : 'AAPL',
+			                data : data,
+			                tooltip: {
+			                    valueDecimals: 2
+			                }
+			            }]
+			        });
+			    });
+				*/
 			}
 
 
