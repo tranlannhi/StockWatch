@@ -250,6 +250,9 @@
 			}
 
 			$scope.drawGauge = function(sentimentArr) {
+				// Remove SVG element from g1 before drawing
+				$('#g1').select("svg").remove();
+
 				var g1 = new JustGage({
 		          id: "g1", 
 		          value: Math.round(sentimentArr[sentimentArr.length - 1].bullish * 100) / 100, 
