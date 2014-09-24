@@ -10,6 +10,7 @@ class StocksController < ApplicationController
 	def show
 		
 	 	symbol  = params[:id]
+	 	puts symbol
 	    startDate = Date.today.at_beginning_of_year
 	    endDate = Date.today.at_beginning_of_year.next_year
 	    psych_startdate = startDate.strftime("%Y-%m-%d")
