@@ -14,7 +14,7 @@
  *= require_self
  *= require bootstrap
  */
-$icon-font-path: 'bootstrap/';
+
 @import 'bootstrap';
 @import 'bootstrap/glyphicons';
 
