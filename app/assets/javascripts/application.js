@@ -92,9 +92,16 @@
 					});
 			};
 
-
+			$scope.domain = window.location.hostname;
+			
+			console.log($scope.domain);
 			$scope.getStock = function(symbol) {
-				var apiUrl = "http://0.0.0.0:3000/stocks/" + symbol;
+				if ($scope.domain == "0.0.0.0") {
+					var apiUrl = "http://0.0.0.0:3000/stocks/" + symbol;
+				}
+				else {
+					var apiUrl = "http://stockmonitor.herokuapp.com/stocks/" + symbol;
+				}
 
 				return $.ajax({
 				        url: apiUrl,
