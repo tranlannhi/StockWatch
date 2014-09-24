@@ -18,9 +18,13 @@
 //= require angular
 
 		angular.module('stockWatchApp', []).controller('stockWatchController', function($scope, $http) {
+
 		  	
 			$scope.init = function() {
 				//$scope.lookupTicker();
+
+				$scope.searchTerm = "aapl";
+				$scope.searchQuote();
 			}
 
 			
@@ -30,13 +34,19 @@
 						$scope.symbol = companies[0].Symbol;
 						$scope.getStock($scope.symbol)
 							.done(function(stock) {
+								$scope.companyLabel = companies[0].Name;
+								$scope.symbolLabel = companies[0].Symbol;
 								$scope.stock = stock;
 								var datapoints = $scope.getDataPoints(stock.sentiment);
-								var highchartData = $scope.getHighChartData(stock.sentiment);
+								var bullishData = $scope.getBullishData(stock.sentiment);
+								var stockData = $scope.getStockData(stock);
 								console.log("DATAPOINTS: %O", datapoints);
+								console.log("STOCK DATA: %O", stockData);
 								//$scope.drawGraph(datapoints);
-								$scope.drawHighChart(highchartData);
+								$scope.drawHighChart(bullishData, '#bull-chart', ' 30 Day Bullishness');
+								$scope.drawHighChart(stockData, '#stock-chart', ' Stock Chart');
 								$scope.drawGauge(stock.sentiment);
+								$scope.getNews();
 								$scope.$apply();
 							});
 					});
@@ -239,7 +249,7 @@
 				return bullishArr;
 			}
 
-			$scope.getHighChartData = function(sentimentArr) {
+			$scope.getBullishData = function(sentimentArr) {
 				var bullishArr = new Array();
 
 				for (var i = 0; i < sentimentArr.length; i++) {
@@ -249,21 +259,51 @@
 				return bullishArr;
 			}
 
+			$scope.getStockData = function(stocks) {
+				var stockArr = new Array();
+
+				for (var i = 0; i < stocks.dates.length; i++) {
+					stockArr.push(new Array(Date.parse(stocks.dates[i]), stocks.values[i]));
+				}
+
+				return stockArr;
+			}
+
+			$scope.getNews = function() {
+				var site = 'http://finance.yahoo.com/rss/headline?s=' + $scope.symbol;
+				var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from xml where url="' + site + '"') + '&format=json';
+				console.log(yql);
+				$.get(yql).done(function (rss) {
+					console.log("RSS: %O", rss.query.results.rss.channel.item);
+					$scope.news = rss.query.results.rss.channel.item;
+					$scope.$apply();
+					/*
+				    $(rss).find("item").each(function () {
+				        var titulo = $(this).find('title').text();
+				        console.log("TITULO: %O", titulo);
+				        $('#news').append("<li>" + titulo + "</li>");
+				    });
+					*/
+				});
+			}
+
 			$scope.drawGauge = function(sentimentArr) {
 				// Remove SVG element from g1 before drawing
-				$('#g1').select("svg").remove();
+				//$('#g1').select("svg").remove();
+				$("#g1").empty();
 
 				var g1 = new JustGage({
 		          id: "g1", 
 		          value: Math.round(sentimentArr[sentimentArr.length - 1].bullish * 100) / 100, 
-		          min: -2,
-		          max: 2,
+		          min: 0,
+		          max: 4,
 		          title: "Current Bullishness",
 		          label: "",
 		          levelColors: ["#FF0000", "#FFFF00", "#00E600"]
 		        });
 			}
 
+			/*
 			$scope.drawHighChart = function(data) {
 				console.log("High Chart Data: %O", data);
 
@@ -287,32 +327,33 @@
 			                }
 			            }]
 			        });
+			}
+			*/
 
-				/*
-				$.getJSON('http://www.highcharts.com/samples/data/jsonp.php?filename=aapl-c.json&callback=?', function (data) {
-			        // Create the chart
-			        $('#container').highcharts('StockChart', {
+
+			$scope.drawHighChart = function(data, tagId, title) {
+				console.log("High Chart Data: %O", data);
+
+				$(tagId).highcharts('StockChart', {
 
 
 			            rangeSelector : {
 			                selected : 1,
-			                inputEnabled: $('#container').width() > 480
+			                inputEnabled: $(tagId).width() > 480
 			            },
 
 			            title : {
-			                text : 'AAPL Stock Price'
+			                text : $scope.symbol + title
 			            },
 
 			            series : [{
-			                name : 'AAPL',
+			                name : $scope.symbol,
 			                data : data,
 			                tooltip: {
 			                    valueDecimals: 2
 			                }
 			            }]
 			        });
-			    });
-				*/
 			}
 
 

@@ -16,7 +16,7 @@ class Twitterfeed
 		  config.access_token_secret = ENV['TWITTER_OAUTH_SECRET']
 		end
 		
-		@tweets = client.search("$"+symbol).take(5)	
+		@tweets = client.search("$"+symbol).take(10)	
 	    
   end
 

@@ -24,12 +24,17 @@
 		
 			<li>
 				<div class="panel panel-default">
-					<div class="panel-heading">
+					<div class="panel-heading" style="background-color: #EFF9FC">
 						<div class='panel-title'>Twitter Feed
-							<ul>
-							    
-							    <h5><li ng-repeat="tweet in stock.tweets">{{tweet.text}}</li></h5
-							    
+							<ul style="list-style-type: none; list-style:none; padding-left:0; font-size: 14px;">
+						    	<li ng-repeat="tweet in stock.tweets" style="padding: 17px 5px 17px 5px;">
+						    		<span style="color: darkgray; word-wrap: break-word;"><b>{{tweet.user.name}}</b>@{{tweet.user.screen_name}}</span>
+						    		<div>
+						    			{{tweet.text}}
+						    		</div>
+						    		
+						    		
+						    	</li>
 							</ul>
 						</div>
 					</div>
@@ -47,7 +52,8 @@
 		<h3 class="page-header">
 			
 			<span ng-if="stock != null">
-				{{companies[0].Name}} {{companies[0].Symbol}} {{stock.values[stock.values.length-1]}} {{stock.sentiment[stock.sentiment.length-1].bullish}}
+				Company: {{companyLabel}} | Symbol: {{symbolLabel}} | Quote: {{stock.values[stock.values.length-1]}} 
+				<!-- Bullishness: {{stock.sentiment[stock.sentiment.length-1].bullish}} -->
 			</span>
 		</h3>
 	</div>
@@ -61,8 +67,9 @@
 			</div>
 			<div class="panel-body">
 				<div id="g1" style="width: 400px; height: 300px;"></div>
-				<div id="graph">Graph</div>
-				<div id="gauge" style="height: 400px; min-width: 310px"></div>
+				<div id="graph"></div>
+				<div id="bull-chart" style="height: 400px; min-width: 310px"></div>
+				<div id="stock-chart" style="height: 400px; min-width: 310px"></div>
 			</div>
 		</div>	
 	</div>
@@ -70,6 +77,11 @@
 		<div class="panel panel-default">
 			<div class="panel-heading">
 				<i class="glyphicon glyphicon-list-alt"></i>&nbspCompany News
+				<ul>
+					<li ng-repeat="item in news">
+						<a href="{{item.link}}">{{item.title}}</a>
+					</li>
+				</ul>
 			</div>
 			<div class="panel-body">
 				<div></div>
