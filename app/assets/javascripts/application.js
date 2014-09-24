@@ -97,8 +97,8 @@
 				var apiUrl = "http://0.0.0.0:3000/stocks/" + symbol;
 
 				return $.ajax({
-				        url: apiUrl
-				        //dataType: "json"
+				        url: apiUrl,
+				        dataType: "json"
 					}).done(function(response) {
 					  	console.log("Stock: %O", response);
 					  	$scope.stock = response;
