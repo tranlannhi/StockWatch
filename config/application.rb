@@ -17,14 +17,14 @@ Bundler.require(*Rails.groups)
 module StockWatch
   class Application < Rails::Application
 
-    before_filter :cors_set_access_control_headers
+    # before_filter :cors_set_access_control_headers
 
-    def cors_set_access_control_headers
-      headers['Access-Control-Allow-Origin'] = '*'# need to be changed once it goes to production 'http://localhost:8080'
-      headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, OPTIONS'
-      headers['Access-Control-Allow-Headers'] = '*, X-Requested-With, X-Prototype-Version, X-CSRF-Token, Content-Type'
-      headers['Access-Control-Max-Age'] = "1728000"
-    end
+    # def cors_set_access_control_headers
+    #   headers['Access-Control-Allow-Origin'] = '*'# need to be changed once it goes to production 'http://localhost:8080'
+    #   headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, OPTIONS'
+    #   headers['Access-Control-Allow-Headers'] = '*, X-Requested-With, X-Prototype-Version, X-CSRF-Token, Content-Type'
+    #   headers['Access-Control-Max-Age'] = "1728000"
+    # end
 
     config.assets.paths << "#{Rails}/vendor/assets/fonts"
     # Settings in config/environments/* take precedence over those specified here.
