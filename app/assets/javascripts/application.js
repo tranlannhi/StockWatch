@@ -96,12 +96,14 @@
 			
 			console.log($scope.domain);
 			$scope.getStock = function(symbol) {
-				if ($scope.domain == "0.0.0.0") {
+				if ($scope.domain == "http://stockmonitor.herokuapp.com") {
+				// if ($scope.domain == "0.0.0.0") {
 					// var apiUrl = "http://0.0.0.0:3000/stocks/" + symbol;
-					var apiUrl = "http://stockmonitor.herokuapp.com/stocks/" + symbol;
+					// var apiUrl = "http://stockmonitor.herokuapp.com/stocks/" + symbol;
+					var apiUrl = "/stocks/" + symbol;
 				}
 				else {
-					var apiUrl = "http://stockmonitor.herokuapp.com/stocks/" + symbol;
+					var apiUrl = "/stocks/" + symbol;
 				}
 
 				return $.ajax({
