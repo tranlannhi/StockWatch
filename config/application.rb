@@ -30,3 +30,12 @@ module StockWatch
     # config.i18n.default_locale = :de
   end
 end
+
+before_filter :cors_set_access_control_headers
+
+def cors_set_access_control_headers
+  headers['Access-Control-Allow-Origin'] = 'http://0.0.0.0:3000/stocks/'# need to be changed once it goes to production 'http://localhost:8080'
+  headers['Access-Control-Allow-Methods'] = 'POST, GET, PUT, DELETE, OPTIONS'
+  headers['Access-Control-Allow-Headers'] = 'http://0.0.0.0:3000/stocks/, X-Requested-With, X-Prototype-Version, X-CSRF-Token, Content-Type'
+  headers['Access-Control-Max-Age'] = "1728000"
+end
