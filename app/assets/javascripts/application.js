@@ -17,7 +17,8 @@
 //= require bootstrap
 //= require angular
 
-		angular.module('stockWatchApp', []).controller('stockWatchController', function($scope, $http) {
+		angular.module('stockWatchApp', [])
+			.controller('stockWatchController', function($scope, $http) {
 
 		  	
 			$scope.init = function() {
