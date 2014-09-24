@@ -14,7 +14,7 @@
  *= require_self
  *= require bootstrap
  */
-
+@import "bootstrap-sprockets";
 @import 'bootstrap';
 @import 'bootstrap/glyphicons';
 
