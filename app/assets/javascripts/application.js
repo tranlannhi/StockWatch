@@ -13,7 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 
-
+//= require_tree .
 //= require bootstrap
 //= require angular
 
@@ -270,7 +270,7 @@
 			}
 
 			$scope.getNews = function() {
-				var site = 'http://finance.yahoo.com/rss/headline?s=' + $scope.symbol;
+				var site = 'http://finance.yahoo.com/rss/headline?s=' + $scope.searchTerm;
 				var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from xml where url="' + site + '"') + '&format=json';
 				console.log(yql);
 				$.get(yql).done(function (rss) {
