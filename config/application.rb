@@ -16,7 +16,8 @@ Bundler.require(*Rails.groups)
 
 module StockWatch
   class Application < Rails::Application
-    before_action :cors_set_access_control_headers
+
+    before_filter :cors_set_access_control_headers
 
     def cors_set_access_control_headers
       headers['Access-Control-Allow-Origin'] = '*'# need to be changed once it goes to production 'http://localhost:8080'
