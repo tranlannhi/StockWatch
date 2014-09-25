@@ -17,6 +17,8 @@
 //= require bootstrap
 //= require angular
 
+		
+
 		angular.module('stockWatchApp', [])
 			.controller('stockWatchController', ['$scope', '$http', function($scope, $http) {
 
@@ -243,7 +245,7 @@
 
 				$(tagId).highcharts('StockChart', {
 
-
+						
 			            rangeSelector : {
 			                selected : 1,
 			                inputEnabled: $(tagId).width() > 480
@@ -439,4 +441,18 @@
 			
 			$scope.init();
 		}]);
+
+		angular.module('stockWatchApp').directive('ngEnter', function() {
+	        return function(scope, element, attrs) {
+	            element.bind("keydown keypress", function(event) {
+	                if(event.which === 13) {
+	                    scope.$apply(function(){
+	                        scope.$eval(attrs.ngEnter, {'event': event});
+	                    });
+
+	                    event.preventDefault();
+	                }
+	            });
+	        };
+	    });
   

@@ -5,7 +5,7 @@
 		<ul class="nav" id ="side-menu">
 			<li class="sidebar-search">
 				<div class="input-group custom-search-form">
-					<input type="text" class="form-control" placeholder="Company/Symbol" ng-model="searchTerm" id="search_bar" ng-change="autocomplete()" />
+					<input type="text" class="form-control" placeholder="Company/Symbol" ng-model="searchTerm" id="search_bar" ng-change="autocomplete()" ng-enter="searchQuote()" />
 						
 
 					<div class="input-group-btn">
@@ -14,11 +14,6 @@
 						</button>
 					</div>
 
-					<!--<ul>
-						<li ng-repeat="company in companies">
-							{{company.Name}} ({{company.Symbol}})
-						</li>
-					</ul> -->	
 				</div>
 			</li>
 		
@@ -80,8 +75,8 @@
 				
 				
 				<div id="graph"></div>
-				<div id="bull-chart" style="min-height: 400px; min-width: 310px"></div>
-				<div id="stock-chart" style="min-height: 400px; min-width: 310px"></div>
+				<div id="bull-chart" style="height: auto; min-width: 310px;"></div>
+				<div id="stock-chart" style="height: auto; min-width: 310px"></div>
 			</div>
 		</div>	
 	</div>
