@@ -24,7 +24,7 @@
 
 		  	
 			$scope.init = function() {
-				//$scope.lookupTicker();
+				
 
 				$scope.searchTerm = "aapl";
 				$scope.searchQuote();
@@ -64,12 +64,12 @@
 					});
 			};
 
-
+			//This function is for typeahead - not yet implement
 			$scope.autocomplete = function() {
 				$scope.typingTimer;
 				$scope.doneTypingInterval = 700;
 
-				//console.log("Length: " + $scope.searchTerm.length);
+				//need to put the minimum length letter before it search to overcome over limit api call
 				if ($scope.searchTerm.length >= 3) {
 					clearTimeout($scope.typingTimer);
 				   	$scope.typingTimer = setTimeout(
@@ -89,7 +89,7 @@
 				}
 			};
 
-
+			//checking respond from Markit On Demand
 			$scope.lookupSymbol = function(searchTerm) {
 				var apiUrl = "http://dev.markitondemand.com/Api/v2/Lookup/jsonp?input=" + searchTerm;
 
@@ -103,6 +103,7 @@
 					});
 			};
 
+			//consume JSON from markitondemand/ Psychsignal/Twitter own API from stock_controller.rb
 			$scope.domain = window.location.hostname;
 			
 			console.log($scope.domain);
@@ -128,7 +129,7 @@
 					});
 			}
 
-
+			//ARRAY PREP FOR CHARTING STOCK QUOTE and SENTIMENT WITH HIGHCHART AND JUSTGAUGE
 			
 			$scope.getDataPoints = function(sentimentArr) {
 				var bullishArr = new Array();
@@ -170,6 +171,8 @@
 				return stockArr;
 			}
 
+			//GET RSS YAHOO FINANCE NEWS
+
 			$scope.getNews = function() {
 				var site = 'http://finance.yahoo.com/rss/headline?s=' + $scope.searchTerm;
 				var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from xml where url="' + site + '"') + '&format=json';
@@ -184,23 +187,7 @@
 				});
 			}
 
-			/*
-			$scope.drawGauge = function(sentimentArr) {
-				// Remove SVG element from g1 before drawing
-				//$('#g1').select("svg").remove();
-				$("#g1").empty();
-
-				var g1 = new JustGage({
-		          id: "g1", 
-		          value: Math.round(sentimentArr[sentimentArr.length - 1].bullish * 100) / 100, 
-		          min: 0,
-		          max: 4,
-		          title: "Market Sentiment",
-		          label: "",
-		          levelColors: ["#FF0000", "#FFFF00", "#00E600"]
-		        });
-			}
-			*/
+			//DRAW CHART WITH HIGHCHART AND JUSTGAGE LIBRARY
 
 			$scope.drawBullishGauge = function(sentimentArr) {
 				// Remove SVG element from g1 before drawing
