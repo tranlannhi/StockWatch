@@ -26,7 +26,13 @@
 
 				$scope.searchTerm = "aapl";
 				$scope.searchQuote();
+
+				$(function () {
+				    $('#example').popover();
+				});
 			}
+
+
 
 			
 			$scope.searchQuote = function() {
@@ -40,13 +46,16 @@
 								$scope.stock = stock;
 								var datapoints = $scope.getDataPoints(stock.sentiment);
 								var bullishData = $scope.getBullishData(stock.sentiment);
+								var bearishData = $scope.getBearishData(stock.sentiment);
 								var stockData = $scope.getStockData(stock);
 								console.log("DATAPOINTS: %O", datapoints);
 								console.log("STOCK DATA: %O", stockData);
 								//$scope.drawGraph(datapoints);
-								$scope.drawHighChart(bullishData, '#bull-chart', ' 30 Day Bullishness');
+								//$scope.drawHighChart(bullishData, '#bull-chart', ' 30 Day Bullishness');
+								$scope.drawMultiLineHighChart(bullishData, bearishData, '#bull-chart', ' 30 Day Sentiment');
 								$scope.drawHighChart(stockData, '#stock-chart', ' Stock Chart');
-								$scope.drawGauge(stock.sentiment);
+								$scope.drawBullishGauge(stock.sentiment);
+								$scope.drawBearishGauge(stock.sentiment);
 								$scope.getNews();
 								$scope.$apply();
 							});
@@ -139,6 +148,16 @@
 				return bullishArr;
 			}
 
+			$scope.getBearishData = function(sentimentArr) {
+				var bearishArr = new Array();
+
+				for (var i = 0; i < sentimentArr.length; i++) {
+					bearishArr.push(new Array(Date.parse(sentimentArr[i].date), sentimentArr[i].bearish));
+				}
+
+				return bearishArr;
+			}
+
 			$scope.getStockData = function(stocks) {
 				var stockArr = new Array();
 
@@ -154,13 +173,16 @@
 				var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from xml where url="' + site + '"') + '&format=json';
 				console.log(yql);
 				$.get(yql).done(function (rss) {
-					console.log("RSS: %O", rss.query.results.rss.channel.item);
-					$scope.news = rss.query.results.rss.channel.item;
-					$scope.$apply();
-					
+					if (rss != null) {
+						console.log("RSS: %O", rss.query.results.rss.channel.item);
+						console.log("RSS FULL: %O", rss);
+						$scope.news = rss.query.results.rss.channel.item;
+						$scope.$apply();
+					}
 				});
 			}
 
+			/*
 			$scope.drawGauge = function(sentimentArr) {
 				// Remove SVG element from g1 before drawing
 				//$('#g1').select("svg").remove();
@@ -171,10 +193,47 @@
 		          value: Math.round(sentimentArr[sentimentArr.length - 1].bullish * 100) / 100, 
 		          min: 0,
 		          max: 4,
-		          title: "Current Bullishness",
+		          title: "Market Sentiment",
 		          label: "",
 		          levelColors: ["#FF0000", "#FFFF00", "#00E600"]
 		        });
+			}
+			*/
+
+			$scope.drawBullishGauge = function(sentimentArr) {
+				// Remove SVG element from g1 before drawing
+				//$('#g1').select("svg").remove();
+				$("#g4").empty();
+
+				var bullishGauge = new JustGage({
+		          id: "g4", 
+		          value: Math.round(sentimentArr[sentimentArr.length - 1].bullish * 100) / 100, 
+		          min: 0,
+		          max: 4,
+		          title: "Bullish Sentiment",
+		          label: "",
+		          //levelColors: ["#FF0000", "#FFFF00", "#00E600"]
+		          levelColors: ["#00E600"]
+		        });
+			}
+
+			$scope.drawBearishGauge = function(sentimentArr) {
+				// Remove SVG element from g1 before drawing
+				//$('#g1').select("svg").remove();
+				$("#g5").empty();
+
+				var bearishGauge = new JustGage({
+		          id: "g5", 
+		          value: Math.round(sentimentArr[sentimentArr.length - 1].bearish * 100) / 100, 
+		          min: 0,
+		          max: 4,
+		          title: "Bearish Sentiment",
+		          label: "",
+		          //levelColors: ["#FF0000", "#FFFF00", "#00E600"]
+		          levelColors: ["#FF0000"]
+		        });
+
+		        console.log("Bearish Gauge: %O", bearishGauge);
 			}
 
 			
@@ -194,13 +253,55 @@
 			                text : $scope.symbol + title
 			            },
 
-			            series : [{
-			                name : $scope.symbol,
-			                data : data,
-			                tooltip: {
-			                    valueDecimals: 2
-			                }
-			            }]
+			            series :
+			            [
+			            	{
+				                name : $scope.symbol,
+				                data : data,
+				                tooltip: {
+				                    valueDecimals: 2
+				                }
+			            	}
+			            ]
+			        });
+			}
+
+
+			$scope.drawMultiLineHighChart = function(bullishData, bearishData, tagId, title) {
+				console.log("High Chart Bullish Data: %O", bullishData);
+				console.log("High Chart Bearish Data: %O", bearishData);
+
+				$(tagId).highcharts('StockChart', {
+
+
+			            rangeSelector : {
+			                selected : 1,
+			                inputEnabled: $(tagId).width() > 480
+			            },
+
+			            title : {
+			                text : $scope.symbol + title
+			            },
+
+			            series :
+			            [
+			            	{
+				                name : $scope.symbol + " (Bullish)",
+				                data : bullishData,
+				                color: "#00E600",
+				                tooltip: {
+				                    valueDecimals: 2
+				                }
+			            	},
+			            	{
+				                name : $scope.symbol + " (Bearish)",
+				                data : bearishData,
+				                color: "#FF0000",
+				                tooltip: {
+				                    valueDecimals: 2
+				                }
+			            	}
+			            ]
 			        });
 			}
 

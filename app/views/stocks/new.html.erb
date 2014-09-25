@@ -24,7 +24,7 @@
 		
 			<li>
 				<div class="panel panel-default">
-					<div class="panel-heading" style="background-color: #EFF9FC">
+					<div class="panel-heading">
 						<div class='panel-title'>Twitter Feed
 							<ul style="list-style-type: none; list-style:none; padding-left:0; font-size: 14px;">
 						    	<li ng-repeat="tweet in stock.tweets" style="padding: 17px 5px 17px 5px;">
@@ -66,10 +66,22 @@
 				<i class="glyphicon glyphicon-signal"></i>&nbspChart Area
 			</div>
 			<div class="panel-body">
-				<div id="g1" style="width: 400px; height: 300px;"></div>
+				
+				<div>
+					<a href="#" id="example" class="btn btn-primary" rel="popover"
+					   data-content="The 0 - 4 sentiment scale measures both the intensity of the sentiment expressed by individuals but also the collective volume of that sentiment expressed over the crowd mood.
+						Sentiment is public mood about knowledge contained within the public domain."
+					   data-original-title="Market Sentiment">Info
+					</a>
+				</div>
+				
+				<div id="g4" style="width: 275px; height: 220px; float: left;"></div>
+				<div id="g5" style="width: 275px; height: 220px; float: right;"></div>
+				
+				
 				<div id="graph"></div>
-				<div id="bull-chart" style="height: 400px; min-width: 310px"></div>
-				<div id="stock-chart" style="height: 400px; min-width: 310px"></div>
+				<div id="bull-chart" style="min-height: 400px; min-width: 310px"></div>
+				<div id="stock-chart" style="min-height: 400px; min-width: 310px"></div>
 			</div>
 		</div>	
 	</div>
