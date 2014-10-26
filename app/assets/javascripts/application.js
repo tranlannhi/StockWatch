@@ -25,7 +25,6 @@
 		  	
 			$scope.init = function() {
 				
-
 				$scope.searchTerm = "aapl";
 				$scope.searchQuote();
 
@@ -33,8 +32,6 @@
 				    $('#example').popover();
 				});
 			}
-
-
 
 			
 			$scope.searchQuote = function() {
@@ -58,7 +55,7 @@
 								$scope.drawHighChart(stockData, '#stock-chart', ' Stock Chart');
 								$scope.drawBullishGauge(stock.sentiment);
 								$scope.drawBearishGauge(stock.sentiment);
-								$scope.getNews();
+								$scope.getNews(companies[0].Symbol);
 								$scope.$apply();
 							});
 					});
@@ -106,7 +103,7 @@
 			//consume JSON from markitondemand/ Psychsignal/Twitter own API from stock_controller.rb
 			$scope.domain = window.location.hostname;
 			
-			console.log($scope.domain);
+			// console.log($scope.domain);
 			$scope.getStock = function(symbol) {
 				if ($scope.domain == "http://stockmonitor.herokuapp.com") {
 				// if ($scope.domain == "0.0.0.0") {
@@ -173,8 +170,8 @@
 
 			//GET RSS YAHOO FINANCE NEWS
 
-			$scope.getNews = function() {
-				var site = 'http://finance.yahoo.com/rss/headline?s=' + $scope.searchTerm;
+			$scope.getNews = function(symbol) {
+				var site = 'http://finance.yahoo.com/rss/headline?s=' + symbol;
 				var yql = 'http://query.yahooapis.com/v1/public/yql?q=' + encodeURIComponent('select * from xml where url="' + site + '"') + '&format=json';
 				console.log(yql);
 				$.get(yql).done(function (rss) {
@@ -266,6 +263,7 @@
 			            rangeSelector : {
 			                selected : 1,
 			                inputEnabled: $(tagId).width() > 480
+			                
 			            },
 
 			            title : {
@@ -292,6 +290,7 @@
 			            	}
 			            ]
 			        });
+
 			}
 
 

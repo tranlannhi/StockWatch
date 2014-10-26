@@ -5,10 +5,10 @@
   <%= stylesheet_link_tag    'application', media: 'all' %>
   <%= javascript_include_tag 'application' %>
 
-  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  
   <script src="http://code.highcharts.com/stock/highstock.js"></script>
   <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
   <script src="http://cdn.jsdelivr.net/justgage/1.0.1/justgage.js"></script>
 
   <style type='text/css'>
@@ -37,9 +37,13 @@
     stroke: steelblue;
     stroke-width: 1.5px;
 }
+#tagId {
+  height: 400px;
+  width: auto;
+}
   </style>
 
-  
+ 
   
   <%= csrf_meta_tags %>
 </head>
